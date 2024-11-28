@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN" packages="com.newrelic.logging.log4j2">
+    <Properties>
+        <Property name="APP_LOG_ROOT">/Users/saurabhkumar/Desktop/logs</Property>
+    </Properties>
+    <Appenders>
+        <Console name="Console" target="SYSTEM_OUT" follow="true">
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %highlight{%level}{FATAL=red, ERROR=red, WARN=yellow, INFO=green, DEBUG=blue, TRACE=magenta} - %msg%n" />
+            <!--            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] - %msg%n"  />-->
+            <!--            <NewRelicLayout/>-->
+        </Console>
+        <RollingFile name="RollingFileAppender" fileName="${APP_LOG_ROOT}/soulstar.userfacing.service.log"
+                     filePattern="${APP_LOG_ROOT}/archived/soulstar.userfacing.service-%d{yyyy-MM-dd}-%i.log.gz">
+            <NewRelicLayout/>
+            <!--            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %highlight{%level}{FATAL=red, ERROR=red, WARN=yellow, INFO=green, DEBUG=blue, TRACE=magenta} - %msg%n" />-->
+            <Policies>
+                <SizeBasedTriggeringPolicy size="100MB" />
+                <TimeBasedTriggeringPolicy />
+            </Policies>
+            <DefaultRolloverStrategy>
+                <Delete basePath="${APP_LOG_ROOT}/archived">
+                    <IfFileName glob="*/soulstar.userfacing.service-*.log.gz">
+                        <IfLastModified age="7d" />
+                    </IfFileName>
+                </Delete>
+            </DefaultRolloverStrategy>
+        </RollingFile>
+    </Appenders>
+    <Loggers>
+        <Root level="info">
+            <AppenderRef ref="RollingFileAppender"/>
+            <AppenderRef ref="Console"/>
+        </Root>
+    </Loggers>
+</Configuration>

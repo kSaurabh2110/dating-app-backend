@@ -15,7 +15,6 @@ public class UserFacingApplication {
 	public static void main(String[] args) {
 		try {
 			SpringApplication.run(UserFacingApplication.class, args);
-			logger.info("UserFacingApplication is up ...");
 		} catch (Exception e) {
 			logger.error("Shutting down the System ... "+ ExceptionUtils.getStackTrace(e));
 			System.exit(1);
