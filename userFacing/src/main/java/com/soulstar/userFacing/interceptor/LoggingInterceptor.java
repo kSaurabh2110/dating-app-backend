@@ -1,5 +1,6 @@
 package com.soulstar.userFacing.interceptor;
 
+import com.soulstar.userFacing.Utils.JsonAndGsonUtils;
 import com.soulstar.userFacing.config.CorrelationIdGenerator;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -29,7 +30,7 @@ public class LoggingInterceptor implements HandlerInterceptor {
         String uuid= StringUtils.isNotBlank(traceId) ? traceId : (StringUtils.isNotBlank(headerUuid) ? headerUuid  : java.util.UUID.randomUUID().toString());
         CorrelationIdGenerator.setUuid(uuid);
         request.setAttribute("requestId", CorrelationIdGenerator.getUuid());
-        logger.info(getUniqueRequestIdLogging()+"Request came at Time "+startTime+" with path "+request.getServletPath());
+        logger.debug(getUniqueRequestIdLogging()+"Request came at Time "+startTime+" of path "+request.getServletPath());
         return true;
     }
 
@@ -37,7 +38,7 @@ public class LoggingInterceptor implements HandlerInterceptor {
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
         Timestamp endTime = new Timestamp(System.currentTimeMillis());
         request.setAttribute("endTime", endTime);
-        logger.debug(getUniqueRequestIdLogging()+"Response sent at Time "+ endTime+" with path "+request.getServletPath());
+        logger.debug(getUniqueRequestIdLogging()+"Response sent at Time "+ endTime+" of path "+request.getServletPath());
     }
 
     @Override
@@ -53,8 +54,7 @@ public class LoggingInterceptor implements HandlerInterceptor {
             logger.error(getUniqueRequestIdLogging()+"Error in after completion :: "+e.getMessage());
             throw new RuntimeException();
         } finally{
-            logger.info(getUniqueRequestIdLogging()+"Request completion Time "+totalTime+" with path "+request.getServletPath()+ " with request body: "+ CorrelationIdGenerator.getParametersPassed()+" and query string "+request.getQueryString()+" and header Fe-User-Agent:"+request.getHeader("Fe-User-Agent")+" and header Fe-User-IP:"+request.getHeader("Fe-User-IP")+" and header Fe-User-Referrer:"+request.getHeader("Fe-User-Referrer")+" and status:"+request.getAttribute("status"));
-            CorrelationIdGenerator.destroyThreadLocal();
+            logger.info(getUniqueRequestIdLogging()+"Request completion Time "+totalTime+" of path "+request.getServletPath()+ " and query string "+request.getQueryString()+" and header Fe-User-Agent:"+request.getHeader("Fe-User-Agent")+" and header Fe-User-IP:"+request.getHeader("Fe-User-IP")+" and header Fe-User-Referrer:"+request.getHeader("Fe-User-Referrer")+" and status:"+request.getAttribute("status"));
         }
     }
 

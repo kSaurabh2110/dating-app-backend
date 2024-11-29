@@ -1,5 +1,6 @@
 package com.soulstar.userFacing.interceptor;
 
+import com.soulstar.userFacing.Utils.JsonAndGsonUtils;
 import com.soulstar.userFacing.config.CorrelationIdGenerator;
 import jakarta.servlet.http.HttpServletRequest;
 import org.apache.commons.lang3.SerializationUtils;
@@ -31,8 +32,7 @@ public class CustomRequestBodyAdviceAdapter extends RequestBodyAdviceAdapter {
     @Override
     public Object afterBodyRead(Object body, HttpInputMessage inputMessage, MethodParameter parameter, Type targetType, Class<? extends HttpMessageConverter<?>> converterType) {
         Timestamp startTime = (Timestamp) httpServletRequest.getAttribute("startTime");
-        CorrelationIdGenerator.setParametersPassed(body!=null ? body.toString() : "");
-        logger.debug(getUniqueRequestIdLogging()+"Post Request sent at Time "+ startTime +" for request path "+httpServletRequest.getServletPath()+" with request body "+ body.toString() +" and header Fe-User-Agent:"+httpServletRequest.getHeader("Fe-User-Agent")+" and header Fe-User-IP:"+httpServletRequest.getHeader("Fe-User-IP")+" and header Fe-User-Referrer:"+httpServletRequest.getHeader("Fe-User-Referrer"));
+        logger.info(getUniqueRequestIdLogging()+"Request came at Time "+ startTime +" for request path "+httpServletRequest.getServletPath()+" with request body "+ JsonAndGsonUtils.getGson().toJson(body));
         return super.afterBodyRead(body, inputMessage, parameter, targetType, converterType);
     }
 
