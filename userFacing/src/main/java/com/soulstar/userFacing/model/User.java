@@ -15,32 +15,19 @@ import java.time.LocalDate;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class User {
     private String phoneNumber;
-    private String password; // Hashed password
-    private LocalDate dateOfBirth;
+    private String name;
     private String gender;
+    private String dob;
     private String location;
-    private String firstName;
-    private String lastName;
-    private Boolean profileCompletedStatus;
 
     public User() {
     }
 
     public User(ResultSet resultSet) throws SQLException {
         this.setPhoneNumber(resultSet.getString("phone_number"));
-        this.setPassword(resultSet.getString("password"));
-        this.setDateOfBirthFromTimestamp(resultSet.getTimestamp("date_of_birth"));
         this.setGender(resultSet.getString("gender"));
-        this.setFirstName(resultSet.getString("first_name"));
-        this.setLastName(resultSet.getString("last_name"));
+        this.setName(resultSet.getString("name"));
         this.setLocation(resultSet.getString("location"));
-        this.setProfileCompletedStatus(resultSet.getBoolean("profile_completed_status"));
-    }
-
-    private void setDateOfBirthFromTimestamp(Timestamp dob) {
-        if (dob==null){
-            return;
-        }
-        this.setDateOfBirth(dob.toLocalDateTime().toLocalDate());
+        this.setDob(resultSet.getString("dob"));
     }
 }

@@ -32,7 +32,7 @@ public class CustomRequestBodyAdviceAdapter extends RequestBodyAdviceAdapter {
     @Override
     public Object afterBodyRead(Object body, HttpInputMessage inputMessage, MethodParameter parameter, Type targetType, Class<? extends HttpMessageConverter<?>> converterType) {
         Timestamp startTime = (Timestamp) httpServletRequest.getAttribute("startTime");
-        logger.info(getUniqueRequestIdLogging()+"Request came at Time "+ startTime +" for request path "+httpServletRequest.getServletPath()+" with request body "+ JsonAndGsonUtils.getGson().toJson(body));
+        logger.info(getUniqueRequestIdLogging()+"Request came at Time "+ startTime +" for request path "+httpServletRequest.getServletPath()+" with request body "+ body.toString());
         return super.afterBodyRead(body, inputMessage, parameter, targetType, converterType);
     }
 

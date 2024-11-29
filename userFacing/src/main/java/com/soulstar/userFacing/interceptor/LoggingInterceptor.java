@@ -52,7 +52,6 @@ public class LoggingInterceptor implements HandlerInterceptor {
             request.setAttribute("status", response.getStatus());
         }catch (Exception e){
             logger.error(getUniqueRequestIdLogging()+"Error in after completion :: "+e.getMessage());
-            throw new RuntimeException();
         } finally{
             logger.info(getUniqueRequestIdLogging()+"Request completion Time "+totalTime+" of path "+request.getServletPath()+ " and query string "+request.getQueryString()+" and header Fe-User-Agent:"+request.getHeader("Fe-User-Agent")+" and header Fe-User-IP:"+request.getHeader("Fe-User-IP")+" and header Fe-User-Referrer:"+request.getHeader("Fe-User-Referrer")+" and status:"+request.getAttribute("status"));
         }
