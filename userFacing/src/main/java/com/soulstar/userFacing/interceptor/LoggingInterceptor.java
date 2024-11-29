@@ -15,7 +15,7 @@ import java.sql.Timestamp;
 import static com.soulstar.userFacing.config.CorrelationIdGenerator.getUniqueRequestIdLogging;
 
 @Component
-public class OverallInterceptor implements HandlerInterceptor {
+public class LoggingInterceptor implements HandlerInterceptor {
     private Logger logger = LogManager.getLogger(getClass());
     private static final String TRACE_ID = "traceId";
     private static final String UUID = "uuid";
@@ -29,7 +29,7 @@ public class OverallInterceptor implements HandlerInterceptor {
         String uuid= StringUtils.isNotBlank(traceId) ? traceId : (StringUtils.isNotBlank(headerUuid) ? headerUuid  : java.util.UUID.randomUUID().toString());
         CorrelationIdGenerator.setUuid(uuid);
         request.setAttribute("requestId", CorrelationIdGenerator.getUuid());
-        logger.info(getUniqueRequestIdLogging()+"Request came at Time "+startTime+" with path "+request.getServletPath()+" and query string "+request.getQueryString());
+        logger.info(getUniqueRequestIdLogging()+"Request came at Time "+startTime+" with path "+request.getServletPath());
         return true;
     }
 
@@ -37,7 +37,7 @@ public class OverallInterceptor implements HandlerInterceptor {
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
         Timestamp endTime = new Timestamp(System.currentTimeMillis());
         request.setAttribute("endTime", endTime);
-        logger.info(getUniqueRequestIdLogging()+"Response sent at Time "+ endTime+" with path "+request.getServletPath());
+        logger.debug(getUniqueRequestIdLogging()+"Response sent at Time "+ endTime+" with path "+request.getServletPath());
     }
 
     @Override
@@ -51,6 +51,7 @@ public class OverallInterceptor implements HandlerInterceptor {
             request.setAttribute("status", response.getStatus());
         }catch (Exception e){
             logger.error(getUniqueRequestIdLogging()+"Error in after completion :: "+e.getMessage());
+            throw new RuntimeException();
         } finally{
             logger.info(getUniqueRequestIdLogging()+"Request completion Time "+totalTime+" with path "+request.getServletPath()+ " with request body: "+ CorrelationIdGenerator.getParametersPassed()+" and query string "+request.getQueryString()+" and header Fe-User-Agent:"+request.getHeader("Fe-User-Agent")+" and header Fe-User-IP:"+request.getHeader("Fe-User-IP")+" and header Fe-User-Referrer:"+request.getHeader("Fe-User-Referrer")+" and status:"+request.getAttribute("status"));
             CorrelationIdGenerator.destroyThreadLocal();
