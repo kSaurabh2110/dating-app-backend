@@ -12,7 +12,7 @@ import java.io.IOException;
 
 @Configuration
 public class FirebaseConfig {
-    @Value("${com.soulstar.userFacing.config.FirebaseConfig.firebaseServiceJsonFilePath:/Users/saurabhkumar/Desktop/Personel_Projects/soulstarbeta-firebase-adminsdk-hxkjl-be87f017c7.json}")
+    @Value("${com.soulstar.userFacing.config.FirebaseConfig.firebaseServiceJsonFilePath}")
     private String firebaseServiceJsonFilePath;
     @PostConstruct
     public void initializeFirebase() throws IOException {

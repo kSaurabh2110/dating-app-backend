@@ -18,6 +18,8 @@ target/
 *.iws
 *.iml
 *.ipr
+.gitignore
+/Users/saurabhkumar/Desktop/Personel_Projects/dating-app-backend/userFacing/src/main/resources/application.properties
 
 ### NetBeans ###
 /nbproject/private/
