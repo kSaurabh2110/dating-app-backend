@@ -14,6 +14,7 @@ import java.time.LocalDate;
 @ToString
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class User {
+    private String uid;
     private String phoneNumber;
     private String name;
     private String gender;
@@ -24,6 +25,7 @@ public class User {
     }
 
     public User(ResultSet resultSet) throws SQLException {
+        this.setUid(resultSet.getString("uid"));
         this.setPhoneNumber(resultSet.getString("phone_number"));
         this.setGender(resultSet.getString("gender"));
         this.setName(resultSet.getString("name"));

@@ -21,14 +21,14 @@ public class UserRepository {
 
 
     // Method to find user by phone number
-    public User findUserByPhoneNumber(String phoneNumber) throws Exception {
-        String sql = "SELECT * FROM users WHERE phone_number = ?";
+    public User findUserByUid(String uid) throws Exception {
+        String sql = "SELECT * FROM users WHERE uid = ?";
         Connection connection = postgresDataSource.getConnection();
         PreparedStatement preparedStatement = connection.prepareStatement(sql);
         ResultSet resultSet = null;
         int index = 1;
         try {
-            preparedStatement.setString(index++, phoneNumber);
+            preparedStatement.setString(index++, uid);
             resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
                 User user = new User(resultSet);
@@ -36,7 +36,7 @@ public class UserRepository {
             }
             return null;
         }catch (SQLException e) {
-            logger.error(CorrelationIdGenerator.getUniqueRequestIdLogging()+"Error while findUserByPhoneNumber :: " + e.getMessage());
+            logger.error(CorrelationIdGenerator.getUniqueRequestIdLogging()+"Error while findUserByUid :: " + e.getMessage());
             throw new RuntimeException();
         }finally {
             postgresDataSource.close(resultSet,preparedStatement,connection);
